@@ -28,89 +28,95 @@ Vychzeje z tohoto templatu:
 ```html
 <!doctype html>
 <html>
-    <head>
-        <title>Message Board</title>
-        <meta charset="UTF-8">
-    </head>
+<head>
+    <title>Message Board</title>
+</head>
 
-    <body>
-    
-        <!-- form will be here -->
-        
-        <ul id="messages">
-            <!-- This is the template message -->
-            <li class="message" style="display: none">
-                <i class="message-time"></i>
-                <strong class="message-author"></strong>
-                <p class="message-text"></p>
-            </li>
-        </ul>
+<body>
+<div id="content">
+    <h1>Message Board</h1>
 
-    </body>
+    <form id="message-form" method="post">
 
-    <!-- BE CAREFUL NOT TO DELETE THE SCRIPT -->
-    <script>
-        const messagesPath = 'https://meow-board-3df096d3e21f.herokuapp.com/messages';
+    </form>
 
-        /*
-         Function to add a new message to the list
-         */
-        function addMessage(time, author, text) {
+    <hr />
 
-            // Get the template li element
-            const template = document.querySelector('#messages .message');
+    <h2>Vzkazy</h2>
 
-            // Clone the template
-            const newMessage = template.cloneNode(true);
-            newMessage.style.display = ''; // Show the new message
+    <ul id="messages">
+        <!-- This is the template message -->
+        <li class="message" style="display: none">
+            <i class="message-time"></i>
+            <strong class="message-author"></strong>
+            <p class="message-text"></p>
+        </li>
+    </ul>
+</div>
+</body>
 
-            // Populate the cloned element with data
-            newMessage.querySelector('.message-time').textContent = time;
-            newMessage.querySelector('.message-author').textContent = author;
-            newMessage.querySelector('.message-text').textContent = text;
+<!-- BE CAREFUL NOT TO DELETE THE SCRIPT -->
+<script>
+    const messagesPath = 'https://meow-board-3df096d3e21f.herokuapp.com/messages';
 
-            // Append the new message to the list
-            document.getElementById('messages').appendChild(newMessage);
-        }
+    /*
+     Function to add a new message to the list
+     */
+    function addMessage(time, author, text) {
 
-        function getMessages() {
-            fetch(messagesPath)
-                    .then(response => response.json())
-                    .then(messages => messages.forEach(message => addMessage(message.time, message.author, message.message)))
-                    .catch(error => console.error(error));
-        }
+        // Get the template li element
+        const template = document.querySelector('#messages .message');
 
-        function postMessages(event) {
-            fetch(messagesPath, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ author: event.target.author.value, message: event.target.message.value })
-            })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json()
-                        } else {
-                            console.error('Error sending message');
-                        }
-                    })
-                    .then(message => {
-                        addMessage(message.time, message.author, message.message)
-                        event.target.author.value = '';
-                        event.target.message.value = '';
-                    })
-                    .then(error => console.error(error));
-        }
+        // Clone the template
+        const newMessage = template.cloneNode(true);
+        newMessage.style.display = ''; // Show the new message
 
-        document.getElementById('message-form')
-                .addEventListener('submit', (event) => {
-                    event.preventDefault();
-                    postMessages(event);
-                });
+        // Populate the cloned element with data
+        newMessage.querySelector('.message-time').textContent = time;
+        newMessage.querySelector('.message-author').textContent = author;
+        newMessage.querySelector('.message-text').textContent = text;
 
-        window.onload = getMessages;
-    </script>
+        // Append the new message to the list
+        document.getElementById('messages').appendChild(newMessage);
+    }
+
+    function getMessages() {
+        fetch(messagesPath)
+                .then(response => response.json())
+                .then(messages => messages.forEach(message => addMessage(message.time, message.author, message.message)))
+                .catch(error => console.error(error));
+    }
+
+    function postMessages(event) {
+        fetch(messagesPath, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ author: event.target.author.value, message: event.target.message.value })
+        })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        console.error('Error sending message');
+                    }
+                })
+                .then(message => {
+                    addMessage(message.time, message.author, message.message)
+                    event.target.author.value = '';
+                    event.target.message.value = '';
+                })
+                .then(error => console.error(error));
+    }
+
+    document.getElementById('message-form')
+            .addEventListener('submit', (event) => {
+                event.preventDefault();
+                postMessages(event);
+            });
+
+    window.onload = getMessages;
+</script>
 </html>
-
 ```
