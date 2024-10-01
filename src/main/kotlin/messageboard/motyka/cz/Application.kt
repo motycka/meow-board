@@ -64,7 +64,7 @@ fun Application.module() {
                 // TODO paging
 
                 call.respond(
-                    message = Messages.take(100).reversed(),
+                    message = Messages.take(100),
                     typeInfo = typeInfo<List<Message>>()
                 )
             }
