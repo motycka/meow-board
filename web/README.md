@@ -6,9 +6,7 @@ S použitím tohoto templatu, vytvoř formulář, který bude postovat zprávy n
 Vytvoř formulář, který bude mít input pro zadání jména, textarea pro zadání zprávy a tlačítko pro odeslání formuláře.
 
 Input pro jmnéno musí mít následující atributy:
-- `id="message-form"`
-- `action="https://meow-board-3df096d3e21f.herokuapp.com/messages"`
-- `method="post"`
+- `name="author"`
 
 Textarea pro zprávu musí mít následující atributy:
 - `name="message"`
