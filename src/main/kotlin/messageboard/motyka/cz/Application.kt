@@ -23,7 +23,7 @@ fun main() {
     embeddedServer(
         factory = Netty,
         port = System.getenv("PORT").let { if (it.isNullOrBlank()) 8088 else it.toInt() },
-//        host = "0.0.0.0",
+        host = "0.0.0.0",
         module = Application::module
     ).start(wait = true)
 }
