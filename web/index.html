@@ -8,7 +8,7 @@
     <body>
         <h1>Vzkazník</h1>
         <p>Něco nám vzkaž</p>
-        <form id="message-form" action="http://localhost:8088/messages" method="post">
+        <form id="message-form" method="post">
             <div>
                 <input type="text" name="author" placeholder="Tvoje jméno">
             </div>
@@ -36,9 +36,11 @@
 
     <!-- BE CAREFUL NOT TO DELETE THE SCRIPT -->
     <script>
-        const messagesPath = 'http://localhost:8088/messages';
+        const messagesPath = 'https://meow-board-3df096d3e21f.herokuapp.com/messages';
 
-        // Function to add a new message to the list
+        /*
+         Function to add a new message to the list
+         */
         function addMessage(time, author, text) {
 
             // Get the template li element
@@ -74,7 +76,7 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        getMessages();
+                        // getMessages();
                         event.target.author.value = '';
                         event.target.message.value = '';
                     } else {
@@ -88,6 +90,7 @@
             .addEventListener('submit', (event) => {
                 event.preventDefault();
                 postMessages(event);
+                location.reload();
             });
 
         window.onload = getMessages;

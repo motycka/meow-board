@@ -7,7 +7,7 @@ Vytvoř formulář, který bude mít input pro zadání jména, textarea pro zad
 
 Input pro jmnéno musí mít následující atributy:
 - `id="message-form"`
-- `action="http://localhost:8088/messages"`
+- `action="https://meow-board-3df096d3e21f.herokuapp.com/messages"`
 - `method="post"`
 
 Textarea pro zprávu musí mít následující atributy:
@@ -53,9 +53,11 @@ Vychzeje z tohoto templatu:
         This is a script that takes care of sending and receiving messages from the server. You can modify it if you
         want, but be careful not to delete it, as it is essential for the message board to work.
          */
-        const messagesPath = 'http://localhost:8080/messages';
+        const messagesPath = 'https://meow-board-3df096d3e21f.herokuapp.com/messages';
 
-        // Function to add a new message to the list
+        /*
+         Function to add a new message to the list
+         */
         function addMessage(time, author, text) {
 
             // Get the template li element
@@ -102,10 +104,11 @@ Vychzeje z tohoto templatu:
         }
 
         document.getElementById('message-form')
-            .addEventListener('submit', (event) => {
-                event.preventDefault();
-                postMessages(event);
-            });
+                .addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    postMessages(event);
+                    location.reload();
+                });
 
         window.onload = getMessages;
     </script>
