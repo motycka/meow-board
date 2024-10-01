@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>Vzkazník</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Vzkazník</h1>
+<p>Něco nám vzkaž</p>
+<form id="message-form" action="http://localhost:8088/messages" method="post">
+    <div>
+        <input type="text" name="author" placeholder="Tvoje jméno">
+    </div>
+    <div>
+        <textarea name="message" placeholder="Vzkaz"></textarea>
+    </div>
+    <div>
+        <button type="submit">Odeslat</button>
+    </div>
+</form>
+
+<hr />
+<h2>Vzkazy</h2>
+
+<ul id="messages">
+    <li class="message">
+        <i class="message-time"></i>
+        <strong class="message-author"></strong>
+        <p class="message-text"></p>
+    </li>
+</ul>
+
+<script>
+    const messagesPath = 'http://localhost:8088/messages';
+
+    function getMessages() {
+        fetch(messagesPath)
+            .then(response => response.json())
+            .then(messages => {
+                // const messageTemplate = document.querySelector('.message');
+                // document.getElementById('messages').innerHTML = messages.map(message => {
+                //     const cloned = messageTemplate.cloneNode(true);
+                //     cloned.querySelector('.message-time').innerHTML = message.time;
+                //     cloned.querySelector('.message-author').innerHTML = message.author;
+                //     cloned.querySelector('.message-text').innerHTML = message.text;
+                //     return cloned;
+                // });
+
+                document.getElementById('messages').innerHTML = messages.map(message => {
+                    return `<li><i>${message.time} </i><strong>${message.author}</strong><p>${message.message}</p></li>`
+                });
+            })
+            .catch(error => console.error(error));
+    }
+
+    window.onload = getMessages;
+
+    document.getElementById('message-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        fetch(messagesPath, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ author: event.target.author.value, message: event.target.message.value })
+        })
+            .then(response => {
+                if (response.ok) {
+                    getMessages();
+                    event.target.author.value = '';
+                    event.target.message.value = '';
+                } else {
+                    console.error('Error sending message');
+                }
+            })
+            .then(error => console.error(error));
+    });
+</script>
+</body>
+</html>
