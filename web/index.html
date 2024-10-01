@@ -3,22 +3,41 @@
     <head>
         <title>Vzkazník</title>
         <meta charset="UTF-8">
+        <style>
+            html {
+                font-family: "Comic Sans MS";
+            }
+            #main {
+                width: 600px;
+                text-align: right;
+            }
+            #name, #message {
+                width: 100%;
+            }
+            #message {
+                height: 200px;
+            }
+            div {
+                margin: 10px;
+            }
+        </style>
     </head>
 
     <body>
-        <h1>Vzkazník</h1>
-        <p>Něco nám vzkaž</p>
-        <form id="message-form" method="post">
-            <div>
-                <input type="text" name="author" placeholder="Tvoje jméno">
-            </div>
-            <div>
-                <textarea name="message" placeholder="Vzkaz"></textarea>
-            </div>
-            <div>
-                <button type="submit">Odeslat</button>
-            </div>
-        </form>
+        <h1>Meow Message Board</h1>
+        <div id="main">
+            <form id="message-form" method="post">
+                <div>
+                    <input id="name" type="text" name="author" placeholder="Tvoje jméno">
+                </div>
+                <div>
+                    <textarea id="message" name="message" placeholder="Vzkaz"></textarea>
+                </div>
+                <div>
+                    <button id="send" type="submit">Odeslat</button>
+                </div>
+            </form>
+        </div>
 
         <hr />
         <h2>Vzkazy</h2>
@@ -76,12 +95,15 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // getMessages();
-                        event.target.author.value = '';
-                        event.target.message.value = '';
+                        return response.json()
                     } else {
                         console.error('Error sending message');
                     }
+                })
+                .then(message => {
+                    addMessage(message.time, message.author, message.message)
+                    event.target.author.value = '';
+                    event.target.message.value = '';
                 })
                 .then(error => console.error(error));
         }
@@ -90,7 +112,6 @@
             .addEventListener('submit', (event) => {
                 event.preventDefault();
                 postMessages(event);
-                location.reload();
             });
 
         window.onload = getMessages;

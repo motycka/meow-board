@@ -48,11 +48,8 @@ Vychzeje z tohoto templatu:
 
     </body>
 
+    <!-- BE CAREFUL NOT TO DELETE THE SCRIPT -->
     <script>
-        /*
-        This is a script that takes care of sending and receiving messages from the server. You can modify it if you
-        want, but be careful not to delete it, as it is essential for the message board to work.
-         */
         const messagesPath = 'https://meow-board-3df096d3e21f.herokuapp.com/messages';
 
         /*
@@ -78,9 +75,9 @@ Vychzeje z tohoto templatu:
 
         function getMessages() {
             fetch(messagesPath)
-                .then(response => response.json())
-                .then(messages => messages.forEach(message => addMessage(message.time, message.author, message.message)))
-                .catch(error => console.error(error));
+                    .then(response => response.json())
+                    .then(messages => messages.forEach(message => addMessage(message.time, message.author, message.message)))
+                    .catch(error => console.error(error));
         }
 
         function postMessages(event) {
@@ -91,23 +88,25 @@ Vychzeje z tohoto templatu:
                 },
                 body: JSON.stringify({ author: event.target.author.value, message: event.target.message.value })
             })
-                .then(response => {
-                    if (response.ok) {
-                        getMessages();
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json()
+                        } else {
+                            console.error('Error sending message');
+                        }
+                    })
+                    .then(message => {
+                        addMessage(message.time, message.author, message.message)
                         event.target.author.value = '';
                         event.target.message.value = '';
-                    } else {
-                        console.error('Error sending message');
-                    }
-                })
-                .then(error => console.error(error));
+                    })
+                    .then(error => console.error(error));
         }
 
         document.getElementById('message-form')
                 .addEventListener('submit', (event) => {
                     event.preventDefault();
                     postMessages(event);
-                    location.reload();
                 });
 
         window.onload = getMessages;
